@@ -4,8 +4,11 @@ const express = require('express')
 const router = new express.Router()
 const multer = require('multer')
 const sharp = require('sharp')
+const cors = require('cors')
 
 
+router.use(cors())
+router.options('*', cors())
 const upload = multer({
     // dest : 'avatars',
     // to limit the size of file being uploaded

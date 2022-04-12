@@ -4,7 +4,11 @@ const router = new express.Router()
 const multer = require('multer')
 const sharp = require('sharp')
 const Product = require('../models/product')
+const cors = require('cors')
 
+
+router.use(cors())
+router.options('*', cors())
 router.post('/categories', async (req, res) => {
     const category = new Category(req.body)
     try {
