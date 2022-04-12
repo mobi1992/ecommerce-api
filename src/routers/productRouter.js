@@ -39,7 +39,7 @@ router.post('/products', upload.single('picture'), async (req, res) => {
         // console.log(req.body.picture_url)
     }
     else {
-        req.body.picture_url = req.hostname + process.env.PORT + '/product/' + req.body.picture_name
+        req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
         // console.log(req.body.picture_url)
     }
     const product = new Product(req.body)
@@ -168,7 +168,7 @@ router.patch('/products/:id', upload.single('picture'), async (req, res) => {
         console.log(req.body.picture_url)
     }
     else {
-        req.body.picture_url = req.hostname + process.env.PORT + '/product/' + req.body.picture_name
+        req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
         console.log(req.body.picture_url)
     }
     }
