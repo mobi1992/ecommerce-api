@@ -34,14 +34,15 @@ router.post('/products', upload.single('picture'), async (req, res) => {
     req.body.picture = buffer
     req.body.picture_name = req.filename
     // console.log(req.body)
-    if (process.env.PORT) {
-        req.body.picture_url = req.hostname + ':' + process.env.PORT + '/product/' + req.body.picture_name
+
+    // for localhost testing
+       // req.body.picture_url = req.hostname + ':' + process.env.PORT + '/product/' + req.body.picture_name
         // console.log(req.body.picture_url)
-    }
-    else {
+   
+    // for production server like heroku
         req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
         // console.log(req.body.picture_url)
-    }
+    
     const product = new Product(req.body)
     // console.log(req.body)
     await product.setCategories(req.body.categories)
@@ -163,14 +164,13 @@ router.patch('/products/:id', upload.single('picture'), async (req, res) => {
         const buffer = await sharp(req.file.buffer).resize({ height: 300, width: 300 }).png().toBuffer()
     req.body.picture = buffer
     req.body.picture_name = req.filename
-    if (process.env.PORT) {
-        req.body.picture_url = req.hostname + ':' + process.env.PORT + '/product/' + req.body.picture_name
-        console.log(req.body.picture_url)
-    }
-    else {
-        req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
-        console.log(req.body.picture_url)
-    }
+    // for localhost testing
+       // req.body.picture_url = req.hostname + ':' + process.env.PORT + '/product/' + req.body.picture_name
+        // console.log(req.body.picture_url)
+   
+    // for production server like heroku
+    req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
+    // console.log(req.body.picture_url)
     }
     
     console.log(req.body)
