@@ -13,6 +13,7 @@ app.use(productRouter)
 app.use(categoryRouter)
 // to solve CORS policiy error when frontend tries to access our server
 app.use(cors());
+app.options("*", cors());
 
 app.listen(port, () => {
     console.log('server is up at port ' + port)
