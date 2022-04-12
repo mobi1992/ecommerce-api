@@ -12,7 +12,7 @@ app.use(express.json())
 app.use(productRouter)
 app.use(categoryRouter)
 // to solve CORS policiy error when frontend tries to access our server
-app.use(cors({origin : "http://localhost:3000", credentials : true}));
+app.use(cors({origin : "https://mobi-ecommerce-api-backend.herokuapp.com", credentials : true}));
 app.options("*", cors());
 
 // app.all('*', function(req, res, next) {
