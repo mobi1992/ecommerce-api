@@ -33,19 +33,21 @@ const upload = multer({
     }
 })
 router.post('/products', upload.single('picture'), async (req, res) => {
-    const buffer = await sharp(req.file.buffer).resize({ height: 300, width: 300 }).png().toBuffer()
+    // you can resize the pictures if you want
+    // const buffer = await sharp(req.file.buffer).resize({ height: 300, width: 300 }).png().toBuffer()
+    const buffer = await sharp(req.file.buffer).png().toBuffer()
     req.body.picture = buffer
     req.body.picture_name = req.filename
     // console.log(req.body)
 
     // for localhost testing
-       // req.body.picture_url = req.hostname + ':' + process.env.PORT + '/product/' + req.body.picture_name
-        // console.log(req.body.picture_url)
-   
+    // req.body.picture_url = req.hostname + ':' + process.env.PORT + '/product/' + req.body.picture_name
+    // console.log(req.body.picture_url)
+
     // for production server like heroku
-        req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
-        // console.log(req.body.picture_url)
-    
+    req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
+    // console.log(req.body.picture_url)
+
     const product = new Product(req.body)
     // console.log(req.body)
     await product.setCategories(req.body.categories)
@@ -66,21 +68,21 @@ router.post('/products', upload.single('picture'), async (req, res) => {
 router.get('/products', async (req, res) => {
     const sort = {}
     // sort products based on the createdAt time, old to new or new to old
-    if(req.query.sortBy){
+    if (req.query.sortBy) {
         const parts = req.query.sortBy.split('_')
         sort[parts[0]] = parts[1] === 'desc' ? -1 : 1      // check the condition parts[1] === 'desc' if it is true then set the property on sort sort[parts[0]] equal to -1 otherwise 1
     }
 
     // sort products based on prices
-    if(req.query.sortProducts) {
+    if (req.query.sortProducts) {
         const parts = req.query.sortProducts.split('_')
         sort[parts[0]] = parts[1] === 'desc' ? -1 : 1
     }
 
     try {
         const products = await Product.find(null, null, {
-            limit : parseInt(req.query.limit),
-            skip : parseInt(req.query.skip),
+            limit: parseInt(req.query.limit),
+            skip: parseInt(req.query.skip),
             sort
         })
         res.send({ products })
@@ -150,32 +152,33 @@ router.delete('/productCategories/:id', async (req, res) => {
     try {
         const product = await Product.findById(req.params.id)
         if (!product) {
-            return res.status(404).send({error : 'Product not found!'})
+            return res.status(404).send({ error: 'Product not found!' })
         }
         await product.deleteCategories()
-        res.send({product})
+        res.send({ product })
     }
-    catch(err) {
-        res.status(500).send({error : 'Internal server error!'})
+    catch (err) {
+        res.status(500).send({ error: 'Internal server error!' })
     }
 })
 
 router.patch('/products/:id', upload.single('picture'), async (req, res) => {
     const _id = req.params.id
-    if(req.file
-        ) {
-        const buffer = await sharp(req.file.buffer).resize({ height: 300, width: 300 }).png().toBuffer()
-    req.body.picture = buffer
-    req.body.picture_name = req.filename
-    // for localhost testing
-       // req.body.picture_url = req.hostname + ':' + process.env.PORT + '/product/' + req.body.picture_name
+    if (req.file) {
+        // you can resize the pictures if you want
+        // const buffer = await sharp(req.file.buffer).resize({ height: 300, width: 300 }).png().toBuffer()
+        const buffer = await sharp(req.file.buffer).png().toBuffer()
+        req.body.picture = buffer
+        req.body.picture_name = req.filename
+        // for localhost testing
+        // req.body.picture_url = req.hostname + ':' + process.env.PORT + '/product/' + req.body.picture_name
         // console.log(req.body.picture_url)
-   
-    // for production server like heroku
-    req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
-    // console.log(req.body.picture_url)
+
+        // for production server like heroku
+        req.body.picture_url = req.hostname + '/product/' + req.body.picture_name
+        // console.log(req.body.picture_url)
     }
-    
+
     console.log(req.body)
 
     const updates = Object.keys(req.body)
