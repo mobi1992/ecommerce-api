@@ -18,7 +18,7 @@ const upload = multer({
     fileFilter(req, file, cb) {     // cb is for callback
         // we are gonna use a regular expression for checking that the image file with .png .jpg .jpeg extentions can get uploaded
         // you can go to https://regex101.com to check and verify your regular expressions
-        if (!file.originalname.match(/\.(png|jpg|jpeg)$/)) {
+        if (!file.originalname.match(/\.(png|jpg|jpeg|HEIC)$/)) {
             // In case of error
             cb(new Error('Please upload an image.'))
         }
