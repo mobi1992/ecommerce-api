@@ -4,6 +4,7 @@ const express = require('express')
 const router = new express.Router()
 const multer = require('multer')
 const sharp = require('sharp')
+const auth = require('../middleware/auth')
 const cors = require('cors')
 
 
@@ -32,7 +33,7 @@ const upload = multer({
         // cb(undefined, false)
     }
 })
-router.post('/products', upload.single('picture'), async (req, res) => {
+router.post('/products', upload.single('picture'), auth, async (req, res) => {
     // you can resize the pictures if you want
     // const buffer = await sharp(req.file.buffer).resize({ height: 300, width: 300 }).png().toBuffer()
     const buffer = await sharp(req.file.buffer).png().toBuffer()
@@ -121,7 +122,7 @@ router.get('/product/:picture_name', async (req, res) => {
     }
 })
 
-router.delete('/products/:id', async (req, res) => {
+router.delete('/products/:id', auth, async (req, res) => {
     try {
         const product = await Product.findByIdAndDelete(req.params.id)
         if (!product) {
@@ -134,7 +135,7 @@ router.delete('/products/:id', async (req, res) => {
     }
 })
 
-router.delete('/products', async (req, res) => {
+router.delete('/products', auth, async (req, res) => {
     try {
         const products = await Product.deleteMany({})
         if (!products) {
@@ -148,7 +149,7 @@ router.delete('/products', async (req, res) => {
     }
 })
 
-router.delete('/productCategories/:id', async (req, res) => {
+router.delete('/productCategories/:id', auth, async (req, res) => {
     try {
         const product = await Product.findById(req.params.id)
         if (!product) {
@@ -162,7 +163,7 @@ router.delete('/productCategories/:id', async (req, res) => {
     }
 })
 
-router.patch('/products/:id', upload.single('picture'), async (req, res) => {
+router.patch('/products/:id', upload.single('picture'), auth, async (req, res) => {
     const _id = req.params.id
     if (req.file) {
         // you can resize the pictures if you want

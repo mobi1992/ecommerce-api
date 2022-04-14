@@ -3,12 +3,14 @@ require('./db/mongoose')
 const app = express()
 const productRouter = require('./routers/productRouter')
 const categoryRouter = require('./routers/categoryRouter')
+const userRouter = require('./routers/userRouter')
 const cors = require('cors')
 const port = process.env.PORT
 
 // to parse the json so that it can become an object
 app.use(express.json())
 
+app.use(userRouter)
 app.use(productRouter)
 app.use(categoryRouter)
 // to solve CORS policiy error when frontend tries to access our server

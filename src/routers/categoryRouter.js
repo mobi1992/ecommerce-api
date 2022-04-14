@@ -4,12 +4,13 @@ const router = new express.Router()
 const multer = require('multer')
 const sharp = require('sharp')
 const Product = require('../models/product')
+const auth = require('../middleware/auth')
 const cors = require('cors')
 
 
 router.use(cors())
 router.options('*', cors())
-router.post('/categories', async (req, res) => {
+router.post('/categories', auth, async (req, res) => {
     const category = new Category(req.body)
     try {
         await category.save()
@@ -71,7 +72,7 @@ router.get('/CategoryProducts/:id', async (req, res) => {
         res.status(500).send({error : 'Internal server error!'})
     }
 })
-router.delete('/categories/:id', async (req, res) => {
+router.delete('/categories/:id', auth, async (req, res) => {
     try {
         const catg = await Category.findByIdAndDelete(req.params.id)
         if (!catg) {
@@ -91,7 +92,7 @@ router.delete('/categories/:id', async (req, res) => {
     }
 })
 
-router.patch('/categories/:id', async (req, res) => {
+router.patch('/categories/:id', auth, async (req, res) => {
     const _id = req.params.id
     const updates = Object.keys(req.body)
     const allowedUpdates = ['name']
